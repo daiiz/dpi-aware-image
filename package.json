@@ -1,0 +1,16 @@
+{
+  "name": "my-png",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "demo": "node -r esm demo/server.mjs"
+  },
+  "author": "daiiz",
+  "license": "MIT",
+  "dependencies": {
+    "esm": "^3.0.84",
+    "polka": "^0.5.1",
+    "serve-static": "^1.13.2"
+  }
+}
