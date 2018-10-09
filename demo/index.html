@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <title>my-png demo</title>
+    <script src='/src/my-png.js'></script>
+    <style>
+      body {
+        padding: 20px;
+        margin: 0;
+        background-color: #303030;
+      }
+      h1, h2 {
+        color: #fefefe
+      }
+      my-png {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>demo</h1>
+
+    <h2>dpi=72</h2>
+    <my-png src='/static/mac.png' followdpi></my-png>
+    <my-png src='/static/mac_2.png'></my-png>
+
+    <h2>dpi=144</h2>
+    <my-png src='/static/mac_retina.png' followdpi></my-png>
+    <my-png src='/static/mac_retina_2.png' followdpi></my-png>
+    <!-- <my-png src='https://i.gyazo.com/19f73fb7696a537668faca24bc30d9b0.png' followdpi></my-png> -->
+    <!-- <my-png src='/static/mac_retina_2_e9407ea76a0b412308cb0caf546582ae.png'></my-png> -->
+  </body>
+</html>
