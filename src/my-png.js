@@ -1,7 +1,8 @@
-/* Portable Network Graphics */
+/* My Portable Network Graphics */
 class MyPng extends HTMLElement {
   constructor () {
     super()
+    this.pngSignature = '89 50 4E 47 0D 0A 1A 0A'
     this.width = 0
     this.height = 0
     this.dpi = 72
@@ -14,7 +15,7 @@ class MyPng extends HTMLElement {
   setImgSize () {
     if (this.dpi === 72) return
     this.img.style.width = `${this.width / (this.dpi / 72)}px`
-    this.img.style.height = `${this.height / (this.dpi / 72)}px`
+    // this.img.style.height = `${this.height / (this.dpi / 72)}px`
   }
 
   padZero2digits (hex) {
@@ -58,26 +59,14 @@ class MyPng extends HTMLElement {
       }
       this.img.setAttribute('src', srcUrl)
     }
+    xhr.onerror = err => {
+      console.error(err)
+      this.img.setAttribute('src', srcUrl)
+    }
     xhr.send(null)
   }
 
-  readIHDR (arrayBuffer) {
-
-  }
-
-  readChunks (arrayBuffer) {
-    const byteArray = new Uint8Array(arrayBuffer)
-    let ptr = 0
-
-    /* PNG ファイルシグネチャ (89 50 4E 47 0D 0A 1A 0A) */
-    const pngFileSignature = [
-      byteArray[0], byteArray[1], byteArray[2], byteArray[3],
-      byteArray[4], byteArray[5], byteArray[6], byteArray[7]
-    ].map(v => this.padZero2digits(v.toString(16)))
-    console.log(pngFileSignature)
-    ptr += pngFileSignature.length
-
-    /* IHDRチャンク */
+  readIHDR (byteArray, ptr) {
     // Length
     ptr += 4
 
@@ -109,11 +98,49 @@ class MyPng extends HTMLElement {
 
     // カラータイプ
     const colorType = byteArray[ptr]
-    console.log('colorType', colorType)
     ptr += 1
 
     // 圧縮手法, フィルター手法, インターレース手法, CRC
     ptr += (1 + 1 + 1 + 4)
+
+    return ptr
+  }
+
+  readpHYs (byteArray, ptr) {
+    const pixelsPerUnitXAxis = this.binToDec(...[
+      byteArray[ptr], byteArray[ptr + 1], byteArray[ptr + 2], byteArray[ptr + 3]
+    ].map(v => this.padZero8digits(v.toString(2))))
+    const pixelsPerUnitYAxis = this.binToDec(...[
+      byteArray[ptr + 4], byteArray[ptr + 5], byteArray[ptr + 6], byteArray[ptr + 7]
+    ].map(v => this.padZero8digits(v.toString(2))))
+    const unitSpecifier = byteArray[ptr + 8] // meters
+    if (unitSpecifier > 0) {
+      // dots per inch を計算する
+      this.dpi = Math.floor(
+        Math.max(pixelsPerUnitXAxis, pixelsPerUnitYAxis) / (unitSpecifier * 39.3))
+    }
+    console.log({pixelsPerUnitXAxis, pixelsPerUnitYAxis, unitSpecifier, dpi: this.dpi})
+  }
+
+  isPngFile (byteArray) {
+    /* PNG ファイルシグネチャ (89 50 4E 47 0D 0A 1A 0A) */
+    const signature = [
+      byteArray[0], byteArray[1], byteArray[2], byteArray[3],
+      byteArray[4], byteArray[5], byteArray[6], byteArray[7]
+    ].map(v => this.padZero2digits(v.toString(16)))
+    return signature.join(' ') === this.pngSignature
+  }
+
+  readChunks (arrayBuffer) {
+    const byteArray = new Uint8Array(arrayBuffer)
+    let ptr = 0
+
+    /* PNGファイルシグネチャ確認 */
+    if (!this.isPngFile(byteArray)) return
+    ptr += 8
+
+    /* IHDRチャンク */
+    ptr = this.readIHDR(byteArray, ptr)
 
     while (true) {
       if (ptr >= byteArray.length) break
@@ -128,24 +155,21 @@ class MyPng extends HTMLElement {
       ]))
       ptr += 4
       // Chunk Data
-      if (chunkType === 'pHYs') {
-        const xPxPerMeter = this.binToDec(...[
-          byteArray[ptr], byteArray[ptr + 1], byteArray[ptr + 2], byteArray[ptr + 3]
-        ].map(v => this.padZero8digits(v.toString(2))))
-        const yPxPerMeter = this.binToDec(...[
-          byteArray[ptr + 4], byteArray[ptr + 5], byteArray[ptr + 6], byteArray[ptr + 7]
-        ].map(v => this.padZero8digits(v.toString(2))))
-        const unit = byteArray[ptr + 8] // メートル
-        if (unit > 0) {
-          // dots per inch を計算する
-          this.dpi = Math.floor(Math.max(xPxPerMeter, yPxPerMeter) / (unit * 39.3))
+      switch (chunkType) {
+        case 'pHYs': {
+          this.readpHYs(byteArray, ptr)
+          break
         }
-        console.log({xPxPerMeter, yPxPerMeter, unit, dpi: this.dpi})
+        case 'IDAT': {
+          break
+        }
+        default: {
+          console.log('length:', chunkLength, 'type:', chunkType)
+        }
       }
       ptr += chunkLength
       // CRC
       ptr += 4
-      console.log('length:', chunkLength, 'type:',chunkType)
     }
   }
 
