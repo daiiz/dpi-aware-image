@@ -1,4 +1,4 @@
-/* pHYs Portable Network Graphics */
+/* Physical Portable Network Graphics */
 class PhysPng extends HTMLElement {
   constructor () {
     super()
