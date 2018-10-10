@@ -26,18 +26,6 @@ class PhysPng extends HTMLElement {
     return (`00000000${hex.toUpperCase()}`).slice('-8')
   }
 
-  // 32-byteの2進数を10進数に変換
-  binToDec (a, b, c, d) {
-    let dec = 0
-    let power = 31
-    const bin = [a, b, c, d].join('')
-    for (let i = 0; i < bin.length; i++) {
-      dec += +bin[i] * Math.pow(2, power)
-      power -= 1
-    }
-    return dec
-  }
-
   async attributeChangedCallback (attr, oldVal, newval) {
     const srcUrl = this.getAttribute('src')
     const followdpi = this.getAttribute('followdpi')
@@ -140,7 +128,7 @@ class PhysPng extends HTMLElement {
       let chunkLength = [
         byteArray[ptr], byteArray[ptr + 1], byteArray[ptr + 2], byteArray[ptr + 3]
       ].map(v => this.padZero8digits(v.toString(2)))
-      chunkLength = this.binToDec(...chunkLength)
+      chunkLength = parseInt(chunkLength.join(''), 2)
       ptr += 4
       const chunkType = new TextDecoder('utf-8').decode(new Uint8Array([
         byteArray[ptr], byteArray[ptr + 1], byteArray[ptr + 2], byteArray[ptr + 3]
