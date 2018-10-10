@@ -18,12 +18,12 @@ class PhysPng extends HTMLElement {
     // this.img.style.height = `${this.height / (this.dpi / 72)}px`
   }
 
-  padZero2digits (hex) {
-    return (`00${hex.toUpperCase()}`).slice('-2')
+  padZero2digits (str) {
+    return (`00${str.toUpperCase()}`).slice('-2')
   }
 
-  padZero8digits (hex) {
-    return (`00000000${hex.toUpperCase()}`).slice('-8')
+  padZero8digits (str) {
+    return (`00000000${str.toUpperCase()}`).slice('-8')
   }
 
   async attributeChangedCallback (attr, oldVal, newval) {
