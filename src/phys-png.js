@@ -1,5 +1,5 @@
-/* My Portable Network Graphics */
-class MyPng extends HTMLElement {
+/* pHYs Portable Network Graphics */
+class PhysPng extends HTMLElement {
   constructor () {
     super()
     this.pngSignature = '89 50 4E 47 0D 0A 1A 0A'
@@ -9,7 +9,7 @@ class MyPng extends HTMLElement {
     this.render()
   }
 
-  static get is () { return 'my-png' }
+  static get is () { return 'phys-png' }
   static get observedAttributes () { return ['src'] }
 
   setImgSize () {
@@ -81,7 +81,7 @@ class MyPng extends HTMLElement {
     const width = [
       byteArray[ptr], byteArray[ptr + 1], byteArray[ptr + 2], byteArray[ptr + 3]
     ].map(v => this.padZero8digits(v.toString(2)))
-    this.width = this.binToDec(...width)
+    this.width = parseInt(width.join(''), 2)
     console.log('width', this.width)
     ptr += width.length
 
@@ -89,7 +89,7 @@ class MyPng extends HTMLElement {
     const height = [
       byteArray[ptr], byteArray[ptr + 1], byteArray[ptr + 2], byteArray[ptr + 3]
     ].map(v => this.padZero8digits(v.toString(2)))
-    this.height = this.binToDec(...height)
+    this.height = parseInt(height.join(''), 2)
     console.log('height', this.height)
     ptr += height.length
 
@@ -107,12 +107,12 @@ class MyPng extends HTMLElement {
   }
 
   readpHYs (byteArray, ptr) {
-    const pixelsPerUnitXAxis = this.binToDec(...[
+    const pixelsPerUnitXAxis = parseInt([
       byteArray[ptr], byteArray[ptr + 1], byteArray[ptr + 2], byteArray[ptr + 3]
-    ].map(v => this.padZero8digits(v.toString(2))))
-    const pixelsPerUnitYAxis = this.binToDec(...[
+    ].map(v => this.padZero8digits(v.toString(2))).join(''), 2)
+    const pixelsPerUnitYAxis = parseInt([
       byteArray[ptr + 4], byteArray[ptr + 5], byteArray[ptr + 6], byteArray[ptr + 7]
-    ].map(v => this.padZero8digits(v.toString(2))))
+    ].map(v => this.padZero8digits(v.toString(2))).join(''), 2)
     const unitSpecifier = byteArray[ptr + 8] // meters
     if (unitSpecifier > 0) {
       // dots per inch を計算する
@@ -160,7 +160,8 @@ class MyPng extends HTMLElement {
           this.readpHYs(byteArray, ptr)
           break
         }
-        case 'IDAT': {
+        case 'IDAT':
+        case 'IEND': {
           break
         }
         default: {
@@ -180,4 +181,4 @@ class MyPng extends HTMLElement {
   }
 }
 
-customElements.define(MyPng.is, MyPng)
+customElements.define(PhysPng.is, PhysPng)
