@@ -74,7 +74,6 @@ class PhysPng extends HTMLElement {
     const chunkType = [
       byteArray[ptr], byteArray[ptr + 1], byteArray[ptr + 2], byteArray[ptr + 3]
     ].map(v => this.padZero2digits(v.toString(16)))
-    console.log(chunkType)
     ptr += chunkType.length
 
     // Width
@@ -93,15 +92,8 @@ class PhysPng extends HTMLElement {
     console.log('height', this.height)
     ptr += height.length
 
-    // ビット深度
-    ptr += 1
-
-    // カラータイプ
-    const colorType = byteArray[ptr]
-    ptr += 1
-
-    // 圧縮手法, フィルター手法, インターレース手法, CRC
-    ptr += (1 + 1 + 1 + 4)
+    // ビット深度, カラータイプ, 圧縮手法, フィルター手法, インターレース手法, CRC
+    ptr += (1 + 1 + 1 + 1 + 1 + 4)
 
     return ptr
   }
