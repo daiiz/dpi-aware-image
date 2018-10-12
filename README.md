@@ -5,4 +5,4 @@ $ npm install
 $ npm run demo
 ```
 
-Open http://localhost:9001
+Open http://localhost:9001/demo/index.html
