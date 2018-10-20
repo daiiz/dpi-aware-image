@@ -39,8 +39,8 @@ class PhysPng extends HTMLElement {
     return this.padZero(value.toString(2), digits)
   }
 
-  async attributeChangedCallback (attr, oldVal, newval) {
-    const srcUrl = this.getAttribute('src')
+  async attributeChangedCallback (attr, oldVal, newVal) {
+    const srcUrl = newVal
     const followdpi = this.getAttribute('followdpi')
     if (!this.img || !srcUrl) return
     if (followdpi === null) {
@@ -87,7 +87,6 @@ class PhysPng extends HTMLElement {
       this.readBytes(4).map(v => this.toBin(v, 8)).join(''), 2)
     const pixelsPerUnitYAxis = parseInt(
       this.readBytes(4).map(v => this.toBin(v, 8)).join(''), 2)
-
     const unitSpecifier = this.readBytes(1) // meters
     if (unitSpecifier > 0) {
       // dots per inch を計算する
@@ -97,17 +96,14 @@ class PhysPng extends HTMLElement {
   }
 
   isPngFile () {
-    /* PNG ファイルシグネチャ (89 50 4E 47 0D 0A 1A 0A) */
     const signature = this.readBytes(8).map(v => this.toHex(v, 2))
     return signature.join(' ') === this.pngSignature
   }
 
   readChunks (arrayBuffer) {
     this.byteArray = new Uint8Array(arrayBuffer)
-
     /* PNGファイルシグネチャ確認 */
     if (!this.isPngFile()) return
-
     /* IHDRチャンク */
     this.readIHDR()
 
