@@ -1,13 +1,14 @@
 {
-  "name": "my-png",
+  "name": "phys-png",
   "version": "1.0.0",
-  "description": "",
+  "description": "Physical PNG element",
   "main": "index.js",
   "scripts": {
     "demo": "node -r esm demo/server.mjs"
   },
-  "author": "daiiz",
+  "author": "Daiki Iizuka",
   "license": "MIT",
+  "repository": "git@github.com:daiiz/pHYs-png.git",
   "dependencies": {
     "esm": "^3.0.84",
     "polka": "^0.5.1",
