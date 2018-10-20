@@ -1,7 +1,7 @@
 /* Physical Portable Network Graphics */
 class PhysPng extends HTMLElement {
-  constructor () {
-    super()
+  constructor (...props) {
+    super(...props)
     this.pngSignature = '89 50 4E 47 0D 0A 1A 0A'
     this.width = 0
     this.height = 0
@@ -24,14 +24,11 @@ class PhysPng extends HTMLElement {
     return (`${zeros}${str.toUpperCase()}`).slice(`-${digits}`)
   }
 
-  readBytes (bytes, ptr) {
-    const headPtr = ptr || this.ptr
-    const res = []
-    for (let i = 0; i < bytes; i++) {
-      res.push(this.byteArray[headPtr + i])
-    }
-    if (!ptr) this.ptr += bytes
-    return res
+  readBytes (bytes) {
+    const res = this.byteArray.slice(this.ptr, this.ptr + bytes)
+    this.ptr += bytes
+    // Convert Uint8Array to Array
+    return Array.from(res)
   }
 
   toHex (value, digits) {
@@ -70,46 +67,33 @@ class PhysPng extends HTMLElement {
   }
 
   readIHDR () {
-    // Length
-    this.ptr += 4
-
-    // Chunk Type (49 48 44 52)
-    const chunkType = this.readBytes(4).map(v => this.toHex(v, 2))
-    // ptr += chunkType.length
+    // Length, ChunkType
+    this.ptr += (4 + 4)
 
     // Width
     const width = this.readBytes(4).map(v => this.toBin(v, 8))
     this.width = parseInt(width.join(''), 2)
-    // ptr += width.length
 
     // Height
     const height = this.readBytes(4).map(v => this.toBin(v, 8))
     this.height = parseInt(height.join(''), 2)
-    // ptr += height.length
 
     // ビット深度, カラータイプ, 圧縮手法, フィルター手法, インターレース手法, CRC
     this.ptr += (1 + 1 + 1 + 1 + 1 + 4)
-    // return ptr
   }
 
   readpHYs () {
-    const ptr = this.ptr
     const pixelsPerUnitXAxis = parseInt(
-      this.readBytes(4, ptr).map(v => this.toBin(v, 8)).join(''), 2)
+      this.readBytes(4).map(v => this.toBin(v, 8)).join(''), 2)
     const pixelsPerUnitYAxis = parseInt(
-      this.readBytes(4, ptr).map(v => this.toBin(v, 8)).join(''), 2)
+      this.readBytes(4).map(v => this.toBin(v, 8)).join(''), 2)
 
-    const unitSpecifier = this.readBytes(1, ptr + 8) // meters
+    const unitSpecifier = this.readBytes(1) // meters
     if (unitSpecifier > 0) {
       // dots per inch を計算する
       this.dpi = Math.floor(
         Math.max(pixelsPerUnitXAxis, pixelsPerUnitYAxis) / (unitSpecifier * 39.3))
     }
-    console.log({
-      pixelsPerUnitXAxis, pixelsPerUnitYAxis, unitSpecifier,
-      src: this.getAttribute('src'),
-      dpi: this.dpi
-    })
   }
 
   isPngFile () {
@@ -120,14 +104,11 @@ class PhysPng extends HTMLElement {
 
   readChunks (arrayBuffer) {
     this.byteArray = new Uint8Array(arrayBuffer)
-    // let ptr = 0
 
     /* PNGファイルシグネチャ確認 */
     if (!this.isPngFile()) return
-    // ptr += 8
 
     /* IHDRチャンク */
-    // ptr = this.readIHDR()
     this.readIHDR()
 
     while (true) {
@@ -135,18 +116,19 @@ class PhysPng extends HTMLElement {
 
       let chunkLength = this.readBytes(4).map(v => this.toBin(v, 8))
       chunkLength = parseInt(chunkLength.join(''), 2)
-      // ptr += 4
+
       const chunkType = new TextDecoder('utf-8')
         .decode(new Uint8Array(this.readBytes(4)))
-      // ptr += 4
 
       // Chunk Data
       if (chunkType === 'IDAT' || chunkType === 'IEND') break
       switch (chunkType) {
         case 'pHYs':
           this.readpHYs()
+          break
+        default:
+          this.ptr += chunkLength
       }
-      this.ptr += chunkLength
       // CRC
       this.ptr += 4
     }
@@ -154,8 +136,8 @@ class PhysPng extends HTMLElement {
 
   render () {
     const shadowRoot = this.attachShadow({mode: 'open'})
-    shadowRoot.innerHTML = `<img class='img' />`
-    this.img = shadowRoot.querySelector('img.img')
+    shadowRoot.innerHTML = `<img />`
+    this.img = shadowRoot.querySelector('img')
   }
 }
 
