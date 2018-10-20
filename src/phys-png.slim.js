@@ -132,8 +132,8 @@ class PhysPng extends HTMLElement {
 
   render () {
     const shadowRoot = this.attachShadow({mode: 'open'})
-    shadowRoot.innerHTML = `<img />`
-    this.img = shadowRoot.querySelector('img')
+    this.img = document.createElement('img')
+    shadowRoot.appendChild(this.img)
   }
 }
 
