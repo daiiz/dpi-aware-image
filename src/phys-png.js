@@ -39,6 +39,9 @@ class PhysPng extends HTMLElement {
     const srcUrl = newVal
     const followdpi = this.getAttribute('followdpi')
     if (!this.img || !srcUrl) return
+    if (!!oldVal) {
+      this.img.removeAttribute('src')
+    }
     if (followdpi === null) {
       this.img.setAttribute('src', srcUrl)
       return
@@ -87,6 +90,7 @@ class PhysPng extends HTMLElement {
   }
 
   readChunks (arrayBuffer) {
+    this.ptr = 0
     this.byteArray = new Uint8Array(arrayBuffer)
     /* PNGファイルシグネチャ確認 */
     if (!this.isPngFile()) return
