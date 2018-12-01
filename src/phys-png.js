@@ -41,6 +41,7 @@ class PhysPng extends HTMLElement {
     if (!this.img || !srcUrl) return
     if (!!oldVal) {
       this.img.removeAttribute('src')
+      this.img.removeAttribute('style')
     }
     if (followdpi === null) {
       this.img.setAttribute('src', srcUrl)
