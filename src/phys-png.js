@@ -2,7 +2,7 @@
 class PhysPng extends HTMLElement {
   constructor (...props) {
     super(...props)
-    this.pngSignature = '89 50 4E 47 0D 0A 1A 0A'
+    this.pngSignature = /^89 50 4E 47 0D 0A 1A 0A$/i
     this.width = 0
     this.height = 0
     this.dpi = 72
@@ -19,11 +19,6 @@ class PhysPng extends HTMLElement {
     this.img.style.width = `${this.width / (this.dpi / 72)}px`
   }
 
-  padZero (str, digits) {
-    const zeros = '0'.repeat(digits)
-    return (`${zeros}${str.toUpperCase()}`).slice(`-${digits}`)
-  }
-
   readBytes (bytes) {
     const res = this.byteArray.slice(this.ptr, this.ptr + bytes)
     this.ptr += bytes
@@ -32,14 +27,15 @@ class PhysPng extends HTMLElement {
   }
 
   toHex (value, digits) {
-    return this.padZero(value.toString(16), digits)
+    return value.toString(16).padStart(digits, '0')
   }
 
   toBin (value, digits) {
-    return this.padZero(value.toString(2), digits)
+    return value.toString(2).padStart(digits, '0')
   }
 
   async attributeChangedCallback (attr, oldVal, newVal) {
+    if (newVal === oldVal) return
     const srcUrl = newVal
     const followdpi = this.getAttribute('followdpi')
     if (!this.img || !srcUrl) return
@@ -47,23 +43,13 @@ class PhysPng extends HTMLElement {
       this.img.setAttribute('src', srcUrl)
       return
     }
-
-    const xhr = new XMLHttpRequest()
-    xhr.open('GET', srcUrl, true)
-    xhr.responseType = 'arraybuffer'
-    xhr.onload = () => {
-      const arrayBuffer = xhr.response
-      if (arrayBuffer) {
-        this.readChunks(arrayBuffer)
-        this.setImgSize()
-      }
-      this.img.setAttribute('src', srcUrl)
+    const res = await fetch(srcUrl, {mode: 'cors'})
+    const arrayBuffer = await res.arrayBuffer()
+    if (arrayBuffer) {
+      this.readChunks(arrayBuffer)
+      this.setImgSize()
     }
-    xhr.onerror = err => {
-      console.error(err)
-      this.img.setAttribute('src', srcUrl)
-    }
-    xhr.send(null)
+    this.img.setAttribute('src', srcUrl)
   }
 
   readIHDR () {
@@ -97,7 +83,7 @@ class PhysPng extends HTMLElement {
 
   isPngFile () {
     const signature = this.readBytes(8).map(v => this.toHex(v, 2))
-    return signature.join(' ') === this.pngSignature
+    return signature.join(' ').match(this.pngSignature)
   }
 
   readChunks (arrayBuffer) {
