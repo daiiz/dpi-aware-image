@@ -3,16 +3,22 @@ class PhysPng extends HTMLElement {
   constructor (...props) {
     super(...props)
     this.pngSignature = /^89 50 4E 47 0D 0A 1A 0A$/i
-    this.width = 0
-    this.height = 0
-    this.dpi = 72
     this.byteArray = null
     this.ptr = 0
+    this.initImg()
     this.render()
   }
 
   static get is () { return 'phys-png' }
   static get observedAttributes () { return ['src'] }
+
+  initImg () {
+    this.width = 0
+    this.height = 0
+    this.dpi = 72
+    this.img.removeAttribute('src')
+    this.img.removeAttribute('style')
+  }
 
   setImgSize () {
     if (this.dpi === 72) return
@@ -39,10 +45,7 @@ class PhysPng extends HTMLElement {
     const srcUrl = newVal
     const followdpi = this.getAttribute('followdpi')
     if (!this.img || !srcUrl) return
-    if (!!oldVal) {
-      this.img.removeAttribute('src')
-      this.img.removeAttribute('style')
-    }
+    if (!!oldVal) this.initImg()
     if (followdpi === null) {
       this.img.setAttribute('src', srcUrl)
       return
