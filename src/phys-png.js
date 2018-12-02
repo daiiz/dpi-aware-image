@@ -55,8 +55,8 @@ class PhysPng extends HTMLElement {
     this.img.removeAttribute('src')
     this.img.removeAttribute('style')
     this.img.style.display = 'block'
-    const maxWidth = +this.getAttribute('max-width') || null
-    const maxHeight = +this.getAttribute('max-height') || null
+    const maxWidth = this.getAttribute('max-width') || null
+    const maxHeight = this.getAttribute('max-height') || null
     if (maxWidth) {
       this.maxSize.maxWidth = maxWidth
     }else if (maxHeight) {
@@ -70,7 +70,7 @@ class PhysPng extends HTMLElement {
       return `${px / (this.dpi / 72)}px`
     }
 
-    if (!!key) this.img.style[key] = `${this.maxSize[key]}px`
+    if (!!key) this.img.style[key] = `${this.maxSize[key]}`
     if (this.dpi === 72) return
 
     if (!key) {
