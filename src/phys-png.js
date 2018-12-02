@@ -12,12 +12,23 @@ class PhysPng extends HTMLElement {
   static get is () { return 'phys-png' }
   static get observedAttributes () { return ['src'] }
 
+  get metadata () {
+    return {
+      rawWidth: this.width,
+      rawHeight: this.height,
+      dpi: this.dpi,
+      src: this.getAttribute('src')
+    }
+  }
+
   initImg () {
     this.width = 0
     this.height = 0
     this.dpi = 72
-    this.img.removeAttribute('src')
-    this.img.removeAttribute('style')
+    if (this.img) {
+      this.img.removeAttribute('src')
+      this.img.removeAttribute('style')
+    }
   }
 
   setImgSize () {
