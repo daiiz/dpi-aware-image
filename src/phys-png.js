@@ -16,39 +16,21 @@ class PhysPng extends HTMLElement {
     return {
       rawWidth: this.width,
       rawHeight: this.height,
+      maxSize: this.maxSize,
       dpi: this.dpi,
       src: this.getAttribute('src')
     }
   }
 
-  initImg () {
-    this.width = 0
-    this.height = 0
-    this.dpi = 72
-    if (this.img) {
-      this.img.removeAttribute('src')
-      this.img.removeAttribute('style')
+  connectedCallback () {
+    this.img.style.display = 'block'
+    const maxWidth = +this.getAttribute('max-width') || null
+    const maxHeight = +this.getAttribute('max-height') || null
+    if (maxWidth) {
+      this.maxSize.maxWidth = maxWidth
+    }else if (maxHeight) {
+      this.maxSize.maxHeight = maxHeight
     }
-  }
-
-  setImgSize () {
-    if (this.dpi === 72) return
-    this.img.style.width = `${this.width / (this.dpi / 72)}px`
-  }
-
-  readBytes (bytes) {
-    const res = this.byteArray.slice(this.ptr, this.ptr + bytes)
-    this.ptr += bytes
-    // Convert Uint8Array to Array
-    return Array.from(res)
-  }
-
-  toHex (value, digits) {
-    return value.toString(16).padStart(digits, '0')
-  }
-
-  toBin (value, digits) {
-    return value.toString(2).padStart(digits, '0')
   }
 
   async attributeChangedCallback (attr, oldVal, newVal) {
@@ -68,6 +50,53 @@ class PhysPng extends HTMLElement {
       this.setImgSize()
     }
     this.img.setAttribute('src', srcUrl)
+  }
+
+  initImg () {
+    this.width = 0
+    this.height = 0
+    this.dpi = 72
+    this.maxSize = {}
+    if (this.img) {
+      this.img.removeAttribute('src')
+      this.img.removeAttribute('style')
+    }
+  }
+
+  setImgSize () {
+    const key = (Object.keys(this.maxSize) || [])[0]
+    const calcPhysPx = px => {
+      return `${px / (this.dpi / 72)}px`
+    }
+
+    if (!!key) this.img.style[key] = `${this.maxSize[key]}px`
+    if (this.dpi === 72) return
+
+    if (!key) {
+      this.img.style.width = calcPhysPx(this.width)
+      return
+    }
+
+    if (/width/i.test(key)) {
+      this.img.style.width = calcPhysPx(this.width)
+    } else {
+      this.img.style.height = calcPhysPx(this.height)
+    }
+  }
+
+  readBytes (bytes) {
+    const res = this.byteArray.slice(this.ptr, this.ptr + bytes)
+    this.ptr += bytes
+    // Convert Uint8Array to Array
+    return Array.from(res)
+  }
+
+  toHex (value, digits) {
+    return value.toString(16).padStart(digits, '0')
+  }
+
+  toBin (value, digits) {
+    return value.toString(2).padStart(digits, '0')
   }
 
   readIHDR () {
