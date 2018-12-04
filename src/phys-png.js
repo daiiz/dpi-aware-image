@@ -23,14 +23,7 @@ class PhysPng extends HTMLElement {
   }
 
   connectedCallback () {
-    this.img.style.display = 'block'
-    const maxWidth = +this.getAttribute('max-width') || null
-    const maxHeight = +this.getAttribute('max-height') || null
-    if (maxWidth) {
-      this.maxSize.maxWidth = maxWidth
-    }else if (maxHeight) {
-      this.maxSize.maxHeight = maxHeight
-    }
+    this.initImg()
   }
 
   async attributeChangedCallback (attr, oldVal, newVal) {
@@ -57,9 +50,17 @@ class PhysPng extends HTMLElement {
     this.height = 0
     this.dpi = 72
     this.maxSize = {}
-    if (this.img) {
-      this.img.removeAttribute('src')
-      this.img.removeAttribute('style')
+
+    if (!this.img) return
+    this.img.removeAttribute('src')
+    this.img.removeAttribute('style')
+    this.img.style.display = 'block'
+    const maxWidth = this.getAttribute('max-width') || null
+    const maxHeight = this.getAttribute('max-height') || null
+    if (maxWidth) {
+      this.maxSize.maxWidth = maxWidth
+    }else if (maxHeight) {
+      this.maxSize.maxHeight = maxHeight
     }
   }
 
@@ -69,7 +70,7 @@ class PhysPng extends HTMLElement {
       return `${px / (this.dpi / 72)}px`
     }
 
-    if (!!key) this.img.style[key] = `${this.maxSize[key]}px`
+    if (!!key) this.img.style[key] = `${this.maxSize[key]}`
     if (this.dpi === 72) return
 
     if (!key) {
