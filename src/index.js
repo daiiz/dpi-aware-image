@@ -29,6 +29,7 @@ export class DpiAwareImage extends HTMLElement {
     switch (attr) {
       case 'src': {
         if (!newVal) return
+        this.removeOlder()
         if (this.getAttribute('followdpi') === null) {
           return this.renderImg(newVal)
         }
@@ -43,12 +44,10 @@ export class DpiAwareImage extends HTMLElement {
     }
   }
 
-  connectedCallback () {}
-
   renderImg (srcUrl) {
     const img = document.createElement('img')
     img.setAttribute('src', srcUrl)
-    img.className = 'dpi-aware-image'
+    img.id = 'dpi-aware-image'
     this.root.appendChild(img)
   }
 
@@ -59,7 +58,7 @@ export class DpiAwareImage extends HTMLElement {
     const viewBox = `0 0 ${width} ${height}`
     const span = document.createElement('span')
     span.innerHTML = `
-      <svg class='dpi-aware-image'
+      <svg id='dpi-aware-image'
         width='${width}' height='${height}' viewBox='${viewBox}'>
         <foreignObject x='0' y='0' width='100%' height='100%'>
           <img width='100%' height='100%' src='${srcUrl}' />
@@ -69,22 +68,26 @@ export class DpiAwareImage extends HTMLElement {
     this.root.appendChild(span.firstElementChild)
   }
 
+  removeOlder () {
+    const older = this.root.querySelector('#dpi-aware-image')
+    if (older) older.remove()
+  }
+
   render () {
     this.root = this.attachShadow({mode: 'open'})
     this.root.innerHTML = `
       <style>
-        .dpi-aware-image {
+        #dpi-aware-image {
           width: auto;
           height: auto;
           max-width: var(--max-width);
           max-height: var(--max-height);
           display: var(--display);
         }
-        .dpi-aware-image img {
+        #dpi-aware-image img {
           display: block;
         }
       </style>
     `
-    console.log(this.root.host, this)
   }
 }
