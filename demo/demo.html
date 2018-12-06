@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>dpi-aware-image demo</title>
+    <link rel='stylesheet' href='./dist/demo.css' />
+  </head>
+  <body>
+    <h1>dpi-aware-image demo</h1>
+    <div>
+      <input type='text' id='url' value=''>
+    </div>
+    <div>
+      <h2><pre>&lt;dpi-aware-image&gt;</pre></h2>
+      <dpi-aware-image followdpi></dpi-aware-image>
+    </div>
+    <div class='img default'>
+      <h2><pre>&lt;img&gt;</pre></h2>
+      <img>
+    </div>
+    <script src='./dist/demo.js'></script>
+    <script>
+      const input = document.querySelector('#url')
+      const physPng = document.querySelector('dpi-aware-image')
+      const img = document.querySelector('img')
+      input.addEventListener('change', e => {
+        const url = e.target.value
+        physPng.setAttribute('src', url)
+        img.src = url
+      })
+    </script>
+  </body>
+</html>

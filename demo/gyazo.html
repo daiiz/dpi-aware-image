@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>dpi-aware-image Gyazo demo</title>
+    <link rel='stylesheet' href='./dist/gyazo.css' />
+  </head>
+  <body>
+    <h1>dpi-aware-image Gyazo demo</h1>
+    <div>
+      <input type='text' id='gyazoId' value='' placeholder='8120a5842dfe69bdc8dcc0c67c788d4f'>
+    </div>
+    <div id='history'></div>
+    <div class='img'>
+      <h2><pre>&lt;dpi-aware-image&gt;</pre></h2>
+      <p>
+        Let's render the image captured by
+        <a target='_blank' href='https://github.com/daiiz/gyazo-browser-extension/tree/phys-png'>
+          daiiz/gyazo-browser-extension#phys-png
+        </a> or Gyazo for macOS (Mojave).
+      </p>
+      <dpi-aware-image
+        followdpi src='https://gyakky.herokuapp.com/gyazo/raw/8120a5842dfe69bdc8dcc0c67c788d4f'>
+      </dpi-aware-image>
+    </div>
+    <div class='img default'>
+      <h2><pre>&lt;img&gt;</pre></h2>
+      <img src='#' />
+    </div>
+    <script src='./dist/demo.js'></script>
+    <script>
+      const input = document.querySelector('#gyazoId')
+      const history = document.querySelector('#history')
+      const physPng = document.querySelector('dpi-aware-image')
+      const img = document.querySelector('img')
+      const updateImage = (target) => {
+        img.removeAttribute('src')
+        const toks = (target.value || target.placeholder).split('//gyazo.com/')
+        const gyazoId = toks[toks.length - 1]
+        const srcUrl = `https://gyakky.herokuapp.com/gyazo/raw/${gyazoId}`
+        physPng.setAttribute('src', srcUrl)
+        img.setAttribute('src', srcUrl)
+        addToHistory(gyazoId)
+      }
+      const addToHistory = gyazoId => {
+        const hasId = Array.from(history.querySelectorAll('a')).some(a => a.dataset.gyazoId === gyazoId)
+        if (hasId) return
+        const a = document.createElement('a')
+        a.innerHTML = gyazoId.substring(0, 8)
+        a.dataset.gyazoId = gyazoId
+        a.onclick = e => {
+          input.value = e.target.dataset.gyazoId
+          updateImage(input)
+        }
+        document.querySelector('#history').appendChild(a)
+      }
+      input.addEventListener('change', (e) => {
+        updateImage(e.target)
+      })
+      updateImage(input)
+      addToHistory('a444c4fe89267755e7bcf4217f81740b')
+    </script>
+  </body>
+</html>
