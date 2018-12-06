@@ -386,7 +386,7 @@ class DpiAwareImage extends HTMLElement {
           height: auto;
           max-width: var(--max-width);
           max-height: var(--max-height);
-          display: var(--display);
+          display: block;
         }
         #dpi-aware-image img {
           display: block;
