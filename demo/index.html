@@ -2,12 +2,21 @@
 <html>
   <head>
     <title>dpi-aware-image demo</title>
-    <link rel='stylesheet' href='../static/index.css' />
+    <link rel='stylesheet' href='./dist/index.css' />
     <style>
+      dpi-aware-image {
+        display: inline-block;
+      }
+
       .image {
         --max-width: 100%;
         --max-height: 300px;
         --display: inline-block;
+      }
+
+      .middle {
+        display: inline-block;
+        vertical-align: middle;
       }
     </style>
   </head>
@@ -41,10 +50,13 @@
     </a>
     <br />
     <br />
-    <dpi-aware-image
-      followdpi class='image'
-      src='https://gyakky.herokuapp.com/gyazo/raw/13c696cd1e707a04feb8f622205ace69'></dpi-aware-image>
-
+    <div>
+      <span>text1</span>
+      <dpi-aware-image
+        followdpi class='image middle'
+        src='https://gyakky.herokuapp.com/gyazo/raw/13c696cd1e707a04feb8f622205ace69'></dpi-aware-image>
+      <span>text2</span>
+    </div>
     <script src='./dist/demo.js'></script>
   </body>
 </html>

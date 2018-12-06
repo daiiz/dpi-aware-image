@@ -4,11 +4,10 @@ body {
   background-color: #303030;
 }
 
-h1, h2, h3 {
+h1, h2, h3, span {
   color: #fefefe
 }
 
-phys-png {
-  display: block;
-  margin: 16px;
+a {
+  text-decoration: none;
 }
