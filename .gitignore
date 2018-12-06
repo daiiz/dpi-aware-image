@@ -1,5 +1,7 @@
 ### https://raw.github.com/github/gitignore/4db4bb6e20ded299466202bfcb5b07f5cf3325cd/Node.gitignore
 
+lib/*
+
 # Logs
 logs
 *.log
@@ -69,7 +71,8 @@ typings/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
