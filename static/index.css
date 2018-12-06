@@ -1,0 +1,14 @@
+body {
+  padding: 20px;
+  margin: 0;
+  background-color: #303030;
+}
+
+h1, h2, h3 {
+  color: #fefefe
+}
+
+phys-png {
+  display: block;
+  margin: 16px;
+}
