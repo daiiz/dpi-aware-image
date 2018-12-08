@@ -1,17 +1,32 @@
 {
-  "name": "phys-png",
-  "version": "1.0.5",
-  "description": "Physical PNG element",
+  "name": "dpi-aware-image",
+  "version": "2.0.5",
+  "description": "DPI aware image CustomElement",
   "main": "src/phys-png.js",
   "scripts": {
-    "demo": "node -r esm demo/server.mjs"
+    "demo": "node -r esm demo/server.mjs",
+    "watch": "run-p watch:*",
+    "watch:demo": "watchify demo/src/index.js -v -t babelify -o demo/dist/demo.js",
+    "build:browserify": "browserify src/index.js -v -t babelify -o lib/index.js",
+    "postinstall": "npm run build:browserify"
   },
   "author": "Daiki Iizuka",
   "license": "MIT",
   "repository": "git@github.com:daiiz/pHYs-png.git",
   "dependencies": {
+    "png-chunk-phys": "github:daiiz/png-chunk-pHYs#master",
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-transform-modules-commonjs": "^7.1.0",
+    "babel-preset-es2015": "^6.24.1"
+  },
+  "devDependencies": {
     "esm": "^3.0.84",
     "polka": "^0.5.1",
-    "serve-static": "^1.13.2"
+    "serve-static": "^1.13.2",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "npm-run-all": "^4.1.5",
+    "watchify": "^3.11.0"
   }
 }

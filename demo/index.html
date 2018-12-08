@@ -1,38 +1,59 @@
 <!doctype html>
 <html>
   <head>
-    <title>phys-png demo</title>
-    <script src='../src/phys-png.js'></script>
+    <title>dpi-aware-image demo</title>
+    <link rel='stylesheet' href='./dist/index.css' />
     <style>
-      body {
-        padding: 20px;
-        margin: 0;
-        background-color: #303030;
+      dpi-aware-image {
+        display: inline-block;
       }
-      h1, h2, h3 {
-        color: #fefefe
+
+      .image {
+        --max-width: 100%;
+        --max-height: 300px;
       }
-      phys-png {
-        display: block;
-        margin: 16px;
+
+      .middle {
+        display: inline-block;
+        vertical-align: middle;
       }
     </style>
   </head>
   <body>
-    <h1>demo</h1>
+    <h1>dpi-aware-image</h1>
 
     <h2>dpi=72</h2>
-    <phys-png src='../static/mac.png' followdpi></phys-png>
-    <phys-png src='../static/mac_2.png'></phys-png>
+    <dpi-aware-image src='../static/mac.png' followdpi></dpi-aware-image>
+    <dpi-aware-image src='../static/mac_2.png'></dpi-aware-image>
 
     <h2>dpi=144</h2>
-    <phys-png src='../static/mac_retina.png' followdpi></phys-png>
-    <phys-png src='../static/mac_retina_2.png' followdpi></phys-png>
+    <dpi-aware-image src='/demo/dist/icon.png'></dpi-aware-image>
 
-    <h3>max-height=300px</h3>
-    <phys-png src='../static/mac_retina_2.png' followdpi max-height='300px'></phys-png>
+    <h2>dpi=144 (followdpi)</h2>
+    <dpi-aware-image src='../static/mac_retina.png' followdpi></dpi-aware-image>
+    <br />
+    <dpi-aware-image src='../static/mac_retina_2.png' followdpi></dpi-aware-image>
+    <br />
+    <dpi-aware-image followdpi src='/demo/dist/icon.png'></dpi-aware-image>
 
-    <h3>max-width=100%</h3>
-    <phys-png src='https://gyakky.herokuapp.com/gyazo/raw/8120a5842dfe69bdc8dcc0c67c788d4f' followdpi max-width='100%'></phys-png>
+    <h3>max-width=100%; max-height=300px;</h3>
+    <dpi-aware-image
+      followdpi class='image'
+      src='../static/mac_retina_2.png'></dpi-aware-image>
+    <a href='https://example.com' target='_blank'>
+      <dpi-aware-image
+        followdpi class='image'
+        src='https://gyakky.herokuapp.com/gyazo/raw/8120a5842dfe69bdc8dcc0c67c788d4f'></dpi-aware-image>
+    </a>
+    <br />
+    <br />
+    <div>
+      <span>text1</span>
+      <dpi-aware-image
+        followdpi class='image middle'
+        src='https://gyakky.herokuapp.com/gyazo/raw/13c696cd1e707a04feb8f622205ace69'></dpi-aware-image>
+      <span>text2</span>
+    </div>
+    <script src='./dist/demo.js'></script>
   </body>
 </html>

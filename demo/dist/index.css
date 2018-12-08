@@ -1,0 +1,13 @@
+body {
+  padding: 20px;
+  margin: 0;
+  background-color: #303030;
+}
+
+h1, h2, h3, span {
+  color: #fefefe
+}
+
+a {
+  text-decoration: none;
+}
