@@ -301,7 +301,10 @@ class DpiAwareImage extends HTMLElement {
       const res = await fetch(srcUrl, {
         mode: 'cors'
       });
-      const arrayBuffer = await res.arrayBuffer();
+      if (!res.ok) throw new Error(res.statusText);
+      const arrayBuffer = await res.arrayBuffer(); // Read PNG pHYs chunk and detect DPI
+      // https://tools.ietf.org/html/rfc2083#page-22
+
       return (0, _pngPhysChunkWriter.readPngDpi)(arrayBuffer);
     } catch (err) {
       return {};
@@ -326,7 +329,6 @@ class DpiAwareImage extends HTMLElement {
             height,
             dpi
           } = await this.getImageSize(newVal);
-          console.log(width, height, dpi);
 
           if (!width || !height || !dpi) {
             return this.renderImg(newVal);

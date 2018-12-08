@@ -17,7 +17,10 @@ export class DpiAwareImage extends HTMLElement {
   async getImageSize (srcUrl) {
     try {
       const res = await fetch(srcUrl, {mode: 'cors'})
+      if (!res.ok) throw new Error(res.statusText)
       const arrayBuffer = await res.arrayBuffer()
+      // Read PNG pHYs chunk and detect DPI
+      // https://tools.ietf.org/html/rfc2083#page-22
       return readPngDpi(arrayBuffer)
     } catch (err) {
       return {}
@@ -34,7 +37,6 @@ export class DpiAwareImage extends HTMLElement {
           return this.renderImg(newVal)
         }
         const {width, height, dpi} = await this.getImageSize(newVal)
-        console.log(width, height, dpi)
         if (!width || !height || !dpi) {
           return this.renderImg(newVal)
         }
