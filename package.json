@@ -1,7 +1,7 @@
 {
-  "name": "phys-png",
-  "version": "1.0.5",
-  "description": "Physical PNG element",
+  "name": "dpi-aware-image",
+  "version": "2.0.5",
+  "description": "DPI aware image CustomElement",
   "main": "src/phys-png.js",
   "scripts": {
     "demo": "node -r esm demo/server.mjs",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": "git@github.com:daiiz/pHYs-png.git",
   "dependencies": {
-    "png-phys-chunk-writer": "github:daiiz/png-pHYs-chunk-writer#add-reader-feature",
+    "png-chunk-phys": "github:daiiz/png-chunk-pHYs#master",
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.1.6",
     "@babel/plugin-transform-modules-commonjs": "^7.1.0",

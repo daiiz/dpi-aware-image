@@ -280,7 +280,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.DpiAwareImage = void 0;
 
-var _pngPhysChunkWriter = require("png-phys-chunk-writer");
+var _pngChunkPhys = require("png-chunk-phys");
 
 class DpiAwareImage extends HTMLElement {
   constructor() {
@@ -305,7 +305,7 @@ class DpiAwareImage extends HTMLElement {
       const arrayBuffer = await res.arrayBuffer(); // Read PNG pHYs chunk and detect DPI
       // https://tools.ietf.org/html/rfc2083#page-22
 
-      return (0, _pngPhysChunkWriter.readPngDpi)(arrayBuffer);
+      return (0, _pngChunkPhys.readPngDpi)(arrayBuffer);
     } catch (err) {
       return {};
     }
@@ -401,4 +401,4 @@ class DpiAwareImage extends HTMLElement {
 
 exports.DpiAwareImage = DpiAwareImage;
 
-},{"png-phys-chunk-writer":3}]},{},[1]);
+},{"png-chunk-phys":3}]},{},[1]);

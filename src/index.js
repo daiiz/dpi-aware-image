@@ -1,4 +1,4 @@
-import {readPngDpi} from 'png-phys-chunk-writer'
+import {readPngDpi} from 'png-chunk-phys'
 
 export class DpiAwareImage extends HTMLElement {
   constructor () {
