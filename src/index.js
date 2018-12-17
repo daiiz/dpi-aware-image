@@ -1,4 +1,4 @@
-import {readPngDpi} from 'png-chunk-phys'
+import {parsePngFormat} from 'png-chunk-phys'
 
 export class DpiAwareImage extends HTMLElement {
   constructor () {
@@ -21,7 +21,7 @@ export class DpiAwareImage extends HTMLElement {
       const arrayBuffer = await res.arrayBuffer()
       // Read PNG pHYs chunk and detect DPI
       // https://tools.ietf.org/html/rfc2083#page-22
-      return readPngDpi(arrayBuffer)
+      return parsePngFormat(arrayBuffer)
     } catch (err) {
       return {}
     }
