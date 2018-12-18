@@ -1,4 +1,4 @@
-import {parsePngFormat} from 'png-chunk-phys'
+import {parsePngFormat} from 'png-dpi-reader-writer'
 
 export class DpiAwareImage extends HTMLElement {
   constructor () {
