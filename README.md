@@ -1,6 +1,6 @@
 # dpi-aware-image
 
-An _img_ element which determine own width and height by considering source png file's pHYs chunk.
+An _img_ element which determine own physical width and height by considering source png image's DPI.
 
 ```
 $ npm install
