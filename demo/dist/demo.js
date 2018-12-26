@@ -74,11 +74,6 @@ class DpiAwareImage extends HTMLElement {
         {
           if (!newVal) return;
           this.removeOlder();
-
-          if (this.getAttribute('followdpi') === null) {
-            return this.renderImg(newVal);
-          }
-
           const {
             width,
             height,
