@@ -11,7 +11,16 @@ Open http://localhost:9001/demo/index.html
 
 ## Usage
 ```html
-<dpi-aware-image followdpi src='/demo/dist/icon.png'></dpi-aware-image>
+<style>
+  /* Optional */
+  dpi-aware-image {
+    display: inline-block;
+    --max-width: 100%;
+    --max-height: 300px;
+  }
+</style>
+
+<dpi-aware-image src='/demo/dist/icon.png'></dpi-aware-image>
 ```
 
 ## Demos

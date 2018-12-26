@@ -33,9 +33,6 @@ export class DpiAwareImage extends HTMLElement {
       case 'src': {
         if (!newVal) return
         this.removeOlder()
-        if (this.getAttribute('followdpi') === null) {
-          return this.renderImg(newVal)
-        }
         const {width, height, dpi} = await this.getImageSize(newVal)
         if (!width || !height || !dpi) {
           return this.renderImg(newVal)
