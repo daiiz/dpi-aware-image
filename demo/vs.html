@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>dpi-aware-image local demo</title>
+    <link rel='stylesheet' href='./dist/index.css' />
+  </head>
+  <body>
+    <h1 id='title'>img vs. dpi-aware-image</h1>
+    <span>Drop an image file here!</span>
+
+    <div>
+      <h2><code>&lt;img&gt;</code></h2>
+      <img src=''/>
+    </div>
+
+    <div id='dai'>
+      <h2><code>&lt;dpi-aware-image&gt;</code></h2>
+      <dpi-aware-image src=''></dpi-aware-image>
+    </div>
+    <script src='./dist/demo.js'></script>
+    <script>
+      const onlyImg = location.search === '?img'
+      if (onlyImg) {
+        document.querySelector('#title').remove()
+        document.querySelector('#dai').remove()
+      }
+    </script>
+    <script>
+      const handleDragOver = e => {
+        e.stopPropagation()
+        e.preventDefault()
+        e.dataTransfer.dropEffect = 'copy'
+      }
+
+      const handleFileSelect = e => {
+        e.stopPropagation()
+        e.preventDefault()
+
+        const files = e.dataTransfer.files
+        if (!files || files.length === 0) return
+        const file = files[0]
+
+        if (!file.type.match('image.*')) return
+        const reader = new FileReader()
+
+        reader.onload = function (e) {
+          const dataUrl = e.target.result
+          document.querySelector('img').setAttribute('src', dataUrl)
+          const dai = document.querySelector('dpi-aware-image')
+          if (dai) dai.setAttribute('src', dataUrl)
+        }
+        reader.readAsDataURL(file)
+      }
+
+      window.addEventListener('dragover', handleDragOver, false)
+      window.addEventListener('drop', handleFileSelect, false)
+    </script>
+  </body>
+</html>
