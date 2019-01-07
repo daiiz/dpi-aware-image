@@ -25,5 +25,6 @@ Open http://localhost:9001/demo/index.html
 
 ## Demos
 - https://daiiz.github.io/dpi-aware-image/demo/index.html
+- https://daiiz.github.io/dpi-aware-image/demo/local.html
 - https://daiiz.github.io/dpi-aware-image/demo/demo.html
 - https://daiiz.github.io/dpi-aware-image/demo/gyazo.html
