@@ -30,11 +30,6 @@ const PX_PER_METER=2835;const dpr=dpi/72;const pixelsPerMeter=Math.floor(PX_PER_
 },{"./crc32":2,"./share":5}],7:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DpiAwareImage = void 0;
-
 var _pngDpiReaderWriter = require("png-dpi-reader-writer");
 
 class DpiAwareImage extends HTMLElement {
@@ -149,6 +144,8 @@ class DpiAwareImage extends HTMLElement {
 
 }
 
-exports.DpiAwareImage = DpiAwareImage;
+module.exports = {
+  DpiAwareImage
+};
 
 },{"png-dpi-reader-writer":3}]},{},[1]);
