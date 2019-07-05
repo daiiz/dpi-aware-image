@@ -7,8 +7,10 @@
     "demo": "node -r esm demo/server.mjs",
     "watch": "run-p watch:*",
     "watch:demo": "watchify demo/src/index.js -v -t babelify -o demo/dist/demo.js",
+    "build": "run-p build:*",
     "build:babel": "./node_modules/.bin/babel src/ --out-dir lib/",
     "build:browserify": "browserify src/index.js -v -t babelify -o lib/index.js",
+    "build:demo": "browserify demo/src/index.js -v -t babelify -o demo/dist/demo.js",
     "prepublishOnly": "npm run build:babel",
     "postpublish": "git push origin --tags && git push origin master"
   },

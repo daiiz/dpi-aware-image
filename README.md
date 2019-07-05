@@ -4,6 +4,7 @@ An _img_ element which determine own physical width and height by considering so
 
 ```
 $ npm install
+$ npm run build
 $ npm run demo
 ```
 
