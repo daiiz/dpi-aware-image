@@ -1,6 +1,6 @@
 import {parsePngFormat} from 'png-dpi-reader-writer'
 
-export class DpiAwareImage extends HTMLElement {
+class DpiAwareImage extends HTMLElement {
   constructor () {
     super()
     this.render()
@@ -90,3 +90,5 @@ export class DpiAwareImage extends HTMLElement {
     `
   }
 }
+
+module.exports = { DpiAwareImage }
