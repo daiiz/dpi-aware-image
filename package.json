@@ -24,7 +24,7 @@
     "png-dpi-reader-writer": "0.0.4"
   },
   "devDependencies": {
-    "esm": "^3.0.84",
+    "esm": "^3.1.0",
     "polka": "^0.5.1",
     "serve-static": "^1.13.2",
     "npm-run-all": "^4.1.5",
