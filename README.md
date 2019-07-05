@@ -2,8 +2,15 @@
 
 An _img_ element which determine own physical width and height by considering source png image's DPI.
 
+## install
+```
+$ npm install @daiiz/dpi-aware-image
+```
+
+## Development
 ```
 $ npm install
+$ npm run build
 $ npm run demo
 ```
 
