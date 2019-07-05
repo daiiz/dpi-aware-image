@@ -9,7 +9,6 @@
     "watch:demo": "watchify demo/src/index.js -v -t babelify -o demo/dist/demo.js",
     "build:babel": "./node_modules/.bin/babel src/ --out-dir lib/",
     "build:browserify": "browserify src/index.js -v -t babelify -o lib/index.js",
-    "postinstall": "npm run build:babel",
     "prepublishOnly": "npm run build:babel",
     "postpublish": "git push origin --tags && git push origin master"
   },
