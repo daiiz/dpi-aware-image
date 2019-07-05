@@ -1,5 +1,5 @@
 {
-  "name": "dpi-aware-image",
+  "name": "@daiiz/dpi-aware-image",
   "version": "2.0.5",
   "description": "DPI aware image CustomElement",
   "main": "lib/index.js",
@@ -9,7 +9,9 @@
     "watch:demo": "watchify demo/src/index.js -v -t babelify -o demo/dist/demo.js",
     "build:babel": "./node_modules/.bin/babel src/ --out-dir lib/",
     "build:browserify": "browserify src/index.js -v -t babelify -o lib/index.js",
-    "postinstall": "npm run build:babel"
+    "postinstall": "npm run build:babel",
+    "prepublishOnly": "npm run build:babel",
+    "postpublish": "git push origin --tags && git push origin master"
   },
   "author": "Daiki Iizuka",
   "license": "MIT",
