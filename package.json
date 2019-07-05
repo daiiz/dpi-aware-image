@@ -1,6 +1,6 @@
 {
   "name": "@daiiz/dpi-aware-image",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "DPI aware image CustomElement",
   "main": "lib/index.js",
   "scripts": {
