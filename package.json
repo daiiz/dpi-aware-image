@@ -15,7 +15,8 @@
   },
   "author": "Daiki Iizuka",
   "license": "MIT",
-  "repository": "git@github.com:daiiz/pHYs-png.git",
+  "repository": "git@github.com:daiiz/dpi-aware-image.git",
+  "private": false,
   "dependencies": {
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.1.6",
