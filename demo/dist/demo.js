@@ -35,6 +35,16 @@ var _pngDpiReaderWriter = require("png-dpi-reader-writer");
 class DpiAwareImage extends HTMLElement {
   constructor() {
     super();
+    this.attrs = Object.create(null);
+
+    for (let i = 0; i < this.attributes.length; i++) {
+      const attrName = this.attributes[i].name;
+
+      if (!['id', 'class', 'src'].includes(attrName)) {
+        this.attrs[attrName] = this.attributes[i].value;
+      }
+    }
+
     this.render();
   }
 
@@ -93,6 +103,11 @@ class DpiAwareImage extends HTMLElement {
     const img = document.createElement('img');
     img.setAttribute('src', srcUrl);
     img.id = 'dpi-aware-image';
+
+    for (const attr in this.attrs) {
+      img.setAttribute(attr, this.attrs[attr]);
+    }
+
     this.root.appendChild(img);
   }
 
@@ -106,11 +121,12 @@ class DpiAwareImage extends HTMLElement {
     height = height / dpr;
     const viewBox = `0 0 ${width} ${height}`;
     const span = document.createElement('span');
+    const attrs = Object.keys(this.attrs).map(name => `${name}="${this.attrs[name]}"`).join(' ');
     span.innerHTML = `
       <svg id='dpi-aware-image'
         width='${width}' height='${height}' viewBox='${viewBox}'>
         <foreignObject x='0' y='0' width='100%' height='100%'>
-          <img width='100%' height='100%' src='${srcUrl}' />
+          <img width='100%' height='100%' src='${srcUrl}' ${attrs} />
         </foreignObject>
       </svg>
     `;
